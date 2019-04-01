@@ -125,3 +125,59 @@ from django.conf.urls import url
 
 urlpatterns = [
 ]
+
+编写投票首页：
+1、编写URL匹配的函数
+# polls/urls.py
+urlpatterns = [
+    # url(URL的正则, 对应的函数, url的名称)
+    url(r'^$', views.index, name='index'),
+]
+2、编写函数
+# polls/views.py
+from django.shortcuts import render
+
+def index(request):  # 用户的请求会作为第一个参数传递给index函数
+    return render(request, 'index.html')  # render加载模板文件返回给用户
+3、创建模板文件，模板有固定位置，不能创建错
+# mkdir polls/templates
+# polls/templates/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>投票首页</title>
+</head>
+<body>
+<h1>投票首页</h1>
+</body>
+</html>
+
+
+编写投票详情页
+1、URL
+# polls/urls.py
+urlpatterns = [
+    # url(URL的正则, 对应的函数, url的名称)
+    url(r'^$', views.index, name='index'),
+    # url(r'\d+/$', views.detail, name='detail'),
+    # url(r'(\d+)/$', views.detail, name='detail'),
+    url(r'(?P<question_id>\d+)/$', views.detail, name='detail'),
+]
+2、视图函数
+# polls/views.py
+def detail(request, question_id):
+    return render(request, 'detail.html', {'question_id': question_id})
+说明：字典将会成为detail.html网页的变量和值 question_id=xx
+3、模板
+# polls/templates/detail.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>投票详情</title>
+</head>
+<body>
+<h1>{{ question_id }}号问题投票详情</h1>
+</body>
+</html>
